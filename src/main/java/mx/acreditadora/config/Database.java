@@ -1,3 +1,4 @@
+
 package mx.acreditadora.config;
 
 import io.github.cdimascio.dotenv.Dotenv;
@@ -6,20 +7,43 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class Database {
-    
-    private static final Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
+
+    private static final Dotenv dotenv =
+        Dotenv.configure().ignoreIfMissing().load();
+
+    private static String getConfig(String key, String defaultValue) {
+        String value = System.getenv(key);
+
+        if (value == null || value.isBlank()) {
+            value = dotenv.get(key, defaultValue);
+        }
+
+        return value;
+    }
+
+    private static final String HOST =
+        getConfig("MYSQLHOST", "localhost");
+
+    private static final String PORT =
+        getConfig("MYSQLPORT", "3306");
+
+    private static final String DATABASE =
+        getConfig("MYSQLDATABASE", "Acreditadora");
 
     private static final String URL =
-    dotenv.get("DB_URL", "jdbc:mysql://localhost:3306/Acreditadora?useSSL=false&serverTimezone=UTC");
+        getConfig(
+            "DB_URL",
+            "jdbc:mysql://" + HOST + ":" + PORT + "/" + DATABASE
+                + "?useSSL=false&serverTimezone=UTC"
+        );
 
-    private static final String USER = dotenv.get("DB_USER", "root");
+    private static final String USER =
+        getConfig("DB_USER", getConfig("MYSQLUSER", "root"));
 
-    private static final String PASSWORD = dotenv.get("DB_PASSWORD");
+    private static final String PASSWORD =
+        getConfig("DB_PASSWORD", getConfig("MYSQLPASSWORD", ""));
 
-  public static Connection getConnection() throws SQLException {
-    Connection conn = DriverManager.getConnection(URL, USER, PASSWORD);
-
-
-    return conn;
-}
+    public static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(URL, USER, PASSWORD);
     }
+}
