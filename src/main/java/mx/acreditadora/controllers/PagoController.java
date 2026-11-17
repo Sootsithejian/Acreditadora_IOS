@@ -31,7 +31,7 @@ public class PagoController {
                     while (rs.next()) {
                         Pago pago = new Pago();
 
-                        pago.setIdPago(rs.getInt("id_pago"));
+                        pago.setIdPago(rs.getInt("id_pagos"));
                         pago.setIdCredito(rs.getInt("id_credito"));
                         pago.setMonto(rs.getDouble("monto"));
                         pago.setFechaPago(rs.getString("fecha_pago"));
