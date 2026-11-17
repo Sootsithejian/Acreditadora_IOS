@@ -18,7 +18,7 @@ public class PagoController {
         List<Pago> lista = new ArrayList<>();
 
         String sql = """
-                     SELECT id_pagos, id_credito, monto, fecha_pago
+                     SELECT id_pago, id_credito, monto, fecha_pago
                      FROM pagos
                      WHERE id_credito = ?
                      """;
@@ -31,7 +31,7 @@ public class PagoController {
                     while (rs.next()) {
                         Pago pago = new Pago();
 
-                        pago.setIdPago(rs.getInt("id_pagos"));
+                        pago.setIdPago(rs.getInt("id_pago"));
                         pago.setIdCredito(rs.getInt("id_credito"));
                         pago.setMonto(rs.getDouble("monto"));
                         pago.setFechaPago(rs.getString("fecha_pago"));
